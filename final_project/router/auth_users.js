@@ -6,16 +6,12 @@ const regd_users = express.Router();
 let users = [];
 
 const isValid = (username) => {
-  let userWithSameName = users.filter((user) => {
-    return user.username === username;
-  });
+  let userWithSameName = users.filter((user) => user.username === username);
   return userWithSameName.length > 0;
 };
 
 const authenticatedUser = (username, password) => {
-  let validUsers = users.filter((user) => {
-    return (user.username === username && user.password === password);
-  });
+  let validUsers = users.filter((user) => user.username === username && user.password === password);
   return validUsers.length > 0;
 };
 
@@ -31,7 +27,7 @@ regd_users.post("/login", (req, res) => {
   if (authenticatedUser(username, password)) {
     let accessToken = jwt.sign({ data: password }, 'access', { expiresIn: 60 * 60 });
     req.session.authorization = { accessToken, username };
-    return res.status(200).send("User successfully logged in");
+    return res.status(200).json({ message: "Customer successfully logged in" });
   } else {
     return res.status(208).json({ message: "Invalid Login. Check username and password" });
   }
